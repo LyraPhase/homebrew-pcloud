@@ -25,6 +25,7 @@ install: $(TAP_DIR) $(TAP_DIR)/$(REPO_NAME) ## Install Tap via git checkout syml
 test: install ## Run tests
 	brew cask audit $(CASK_NAME)
 	brew cask install --verbose $(CASK_NAME)
+	pkgutil --pkgs=com.pcloud.pcloud.macos
 
 clean:: ## Remove temporary/build files.
 	rm -rf $(TAP_DIR)/$(REPO_NAME)
