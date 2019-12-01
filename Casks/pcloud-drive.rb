@@ -1,6 +1,6 @@
 cask 'pcloud-drive' do
-  version '3.7.9'
-  sha256 '0f251933096e44cdcc15334d6d27fec347dad5d66134f1dc93e21a152a2a163c'
+  version '3.8.4'
+  sha256 'c5c29785d6584d5c35da340e01687dc479949bce10cd7545ffef6b1f0e18bcd0'
 
   url do
     require 'net/http'
