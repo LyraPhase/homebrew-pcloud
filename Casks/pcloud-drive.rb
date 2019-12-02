@@ -6,7 +6,7 @@ cask 'pcloud-drive' do
     require 'net/http'
     require 'json'
     api = 'https://api.pcloud.com/'
-    code = 'XZNF4C7Zrqw256sL45jrAn7RhtDVnkKAlOw7'
+    code = 'XZYOy4kZNOeMXcp5GkFAEbmG8Uh5eVl35j4k'
     uri = URI(api + 'getpublinkdownload?code=' + code)
     response = Net::HTTP.get(uri)
     data = JSON.parse(response)
