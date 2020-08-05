@@ -5,6 +5,7 @@ before_install:
   - brew update
 install:
   - make install
+  - sudo /usr/bin/csrutil disable
   - make download
 script:
   - make test
