@@ -22,14 +22,14 @@
 
 
 cask "pcloud-drive" do
-  version "3.9.4"
-  sha256 "05e6ed62185d689688894096e0b9c32ee9256b77d4f4e1503d60dbfec1b5c593"
+  version "3.9.7"
+  sha256 "b28f013c567398c894811f83d24ac847fb3df8e901ec33527491459be8e15157"
 
   url do
     require "net/http"
     require "json"
     api = "https://api.pcloud.com/"
-    code = "XZxCdakZRh9qTwDrTU57A4KXw5E2CVMnLrDV"
+    code = "XZRYKzXZ2z8Fr6282QFxca2UsLJzA7LXMOsV"
     uri = URI(api + "getpublinkdownload?code=" + code)
     response = Net::HTTP.get(uri)
     data = JSON.parse(response)
@@ -37,6 +37,7 @@ cask "pcloud-drive" do
   end
   name "pCloud Drive"
   homepage "https://www.pcloud.com/"
+  desc "Client for the pCloud virtual cloud storage service"
 
   depends_on cask: "osxfuse"
 
