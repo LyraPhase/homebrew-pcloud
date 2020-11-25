@@ -41,7 +41,7 @@ cask "pcloud-drive" do
 
   depends_on cask: "osxfuse"
 
-  pkg "pCloud Drive 3.9.4.pkg"
+  pkg "pCloud Drive 3.9.7.pkg"
 
   uninstall quit:    "com.pcloud.pcloud.macos",
             pkgutil: "com.mobileinno.pkg.pCloudDrive"
