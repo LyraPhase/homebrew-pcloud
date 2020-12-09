@@ -23,8 +23,8 @@ install: $(TAP_DIR) $(TAP_DIR)/$(REPO_NAME) ## Install Tap via git checkout syml
 	brew tap
 
 test: install ## Run tests
-	brew cask audit $(CASK_NAME)
-	brew cask install --verbose $(CASK_NAME)
+	brew audit --cask $(CASK_NAME)
+	brew install --cask --verbose $(CASK_NAME)
 	pkgutil --pkgs=com.mobileinno.pkg.pCloudDrive
 
 clean:: ## Remove temporary/build files.
