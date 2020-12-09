@@ -26,6 +26,18 @@ To uninstall run:
 
     brew uninstall --cask pcloud-drive
 
+## Sponsor
+
+If you find this project useful and appreciate my work,
+would you be willing to click one of the buttons below to Sponsor this project and help me continue?
+
+- <noscript><a href="https://github.com/sponsors/trinitronx">:heart: Sponsor</a></noscript>
+- <noscript><a href="https://liberapay.com/trinitronx/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+- <noscript><a href="https://paypal.me/JamesCuzella"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" alt="Donate with PayPal" /></a></noscript>
+
+Every little bit is appreciated! Thank you! 🙏
+
+
 ## Development
 
 If you wish to contribute to this Cask, there is a helper `Makefile` with some useful targets.
