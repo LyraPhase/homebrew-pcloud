@@ -33,7 +33,7 @@ cask "pcloud-drive" do
     uri = URI(api + "getpublinkdownload?code=" + code)
     response = Net::HTTP.get(uri)
     data = JSON.parse(response)
-    data["hosts"][0] + data["path"]
+    "https://" + data["hosts"][0] + data["path"]
   end
   name "pCloud Drive"
   homepage "https://www.pcloud.com/"
