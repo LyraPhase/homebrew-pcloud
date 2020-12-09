@@ -16,15 +16,15 @@ Then, run the following in your command-line:
 
 **Note**: For info run:
 
-    brew cask info pcloud-drive
+    brew info --cask pcloud-drive
 
 Once the tap is installed, you can install `truecrypt`!
 
-    brew cask install pcloud-drive
+    brew install --cask pcloud-drive
 
 To uninstall run:
 
-    brew cask uninstall pcloud-drive
+    brew uninstall --cask pcloud-drive
 
 ## Development
 
