@@ -22,14 +22,14 @@
 
 
 cask "pcloud-drive" do
-  version "3.9.10"
-  sha256 "1279444a3d773103c0864eafd6b64e9090b14ebc87a19845d9417dbda24072fd"
+  version "3.10.0"
+  sha256 "c98a3cf8994f335e8a7f548dbc975e7f894cf640ddbe27fe9838442352ecb39e"
 
   url do
     require "net/http"
     require "json"
     api = "https://api.pcloud.com/"
-    code = "XZ36mmXZyQgWjRYW7RuJ27omklH6E7O5fiU7"
+    code = "XZdNfSXZciWjfoKaKUk2eIcL9ryR9uC9lscX"
     uri = URI(api + "getpublinkdownload?code=" + code)
     response = Net::HTTP.get(uri)
     data = JSON.parse(response)
