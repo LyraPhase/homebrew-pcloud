@@ -23,13 +23,23 @@
 
 cask "pcloud-drive" do
   version "3.10.0"
-  sha256 "c98a3cf8994f335e8a7f548dbc975e7f894cf640ddbe27fe9838442352ecb39e"
+
+  if Hardware::CPU.intel?
+    sha256 "c98a3cf8994f335e8a7f548dbc975e7f894cf640ddbe27fe9838442352ecb39e"
+    pkg "pCloud Drive #{version.to_s}.pkg"
+
+    code = "XZdNfSXZciWjfoKaKUk2eIcL9ryR9uC9lscX"
+  else
+    sha256 "f28d9f6ef5144f9b2ff6603617601bdf0de09ac547de4b1c20a56348783c7049"
+    pkg "pCloud Drive #{version.to_s} M1.pkg"
+
+    code = "XZkafSXZdLkSWOtq4YhWcqqju4MKPfN5Lz00"
+  end
 
   url do
     require "net/http"
     require "json"
     api = "https://api.pcloud.com/"
-    code = "XZdNfSXZciWjfoKaKUk2eIcL9ryR9uC9lscX"
     uri = URI(api + "getpublinkdownload?code=" + code)
     response = Net::HTTP.get(uri)
     data = JSON.parse(response)
@@ -39,9 +49,7 @@ cask "pcloud-drive" do
   homepage "https://www.pcloud.com/"
   desc "Client for the pCloud virtual cloud storage service"
 
-  depends_on cask: "osxfuse"
-
-  pkg "pCloud Drive #{version.to_s}.pkg"
+  depends_on cask: "macfuse"
 
   uninstall quit:    "com.pcloud.pcloud.macos",
             pkgutil: "com.mobileinno.pkg.pCloudDrive"
