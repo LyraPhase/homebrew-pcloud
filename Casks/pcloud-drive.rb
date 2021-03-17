@@ -45,6 +45,13 @@ cask "pcloud-drive" do
     data = JSON.parse(response)
     "https://" + data["hosts"][0] + data["path"]
   end
+
+  livecheck do
+    url "https://www.pcloud.com/release-notes/mac-os.html"
+    strategy :page_match
+    regex(%r{<b>(\d+(?:\.\d+)*)</b>}i)
+  end
+
   name "pCloud Drive"
   homepage "https://www.pcloud.com/"
   desc "Client for the pCloud virtual cloud storage service"
