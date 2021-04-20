@@ -2,7 +2,7 @@ version: ~> 1.0
 language: objective-c
 osx_image: xcode61
 before_install:
-  - brew update
+  - brew update >/dev/null
 install:
   - make install
 script:
