@@ -1,4 +1,5 @@
 version: ~> 1.0
+os: osx
 language: objective-c
 osx_image: xcode12.2
 addons:
@@ -9,5 +10,5 @@ install:
   - make install
 script:
   - make test
-matrix:
+jobs:
   fast_finish: true
