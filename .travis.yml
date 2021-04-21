@@ -1,8 +1,10 @@
 version: ~> 1.0
 language: objective-c
-osx_image: xcode61
-before_install:
-  - brew update >/dev/null
+osx_image: xcode12.2
+addons:
+  homebrew:
+    brewfile: Brewfile.travis
+    update: true
 install:
   - make install
 script:
