@@ -22,26 +22,41 @@
 
 
 cask "pcloud-drive" do
-  version "3.10.0"
-  sha256 "c98a3cf8994f335e8a7f548dbc975e7f894cf640ddbe27fe9838442352ecb39e"
+  version "3.10.2"
+
+  if Hardware::CPU.intel?
+    sha256 "0a3165857cbdf0de573e732a0888dffad54f7bf7e5f006c89ad438e40ee15609"
+    pkg "pCloud Drive #{version.to_s}.pkg"
+
+    code = "XZcYKsXZE6I5dQEQkahQSKi29QJAYBVo6nFk"
+  else
+    sha256 "3503f4b0fa4e916a5b6415946bc3cc9c0d68574df26a4caf4c3328ef4348b2b8"
+    pkg "pCloud Drive #{version.to_s} M1.pkg"
+
+    code = "XZ4mKsXZHjO1f24VbE8OLfpAhBrga0mTG0y0"
+  end
 
   url do
     require "net/http"
     require "json"
     api = "https://api.pcloud.com/"
-    code = "XZdNfSXZciWjfoKaKUk2eIcL9ryR9uC9lscX"
     uri = URI(api + "getpublinkdownload?code=" + code)
     response = Net::HTTP.get(uri)
     data = JSON.parse(response)
     "https://" + data["hosts"][0] + data["path"]
   end
+
+  livecheck do
+    url "https://www.pcloud.com/release-notes/mac-os.html"
+    strategy :page_match
+    regex(%r{<b>(\d+(?:\.\d+)*)</b>}i)
+  end
+
   name "pCloud Drive"
   homepage "https://www.pcloud.com/"
   desc "Client for the pCloud virtual cloud storage service"
 
-  depends_on cask: "osxfuse"
-
-  pkg "pCloud Drive #{version.to_s}.pkg"
+  depends_on cask: "macfuse"
 
   uninstall quit:    "com.pcloud.pcloud.macos",
             pkgutil: "com.mobileinno.pkg.pCloudDrive"
