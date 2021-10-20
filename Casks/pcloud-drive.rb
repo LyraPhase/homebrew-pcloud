@@ -22,18 +22,20 @@
 
 
 cask "pcloud-drive" do
-  version "3.10.5"
+  version "3.10.6"
 
   if Hardware::CPU.intel?
-    sha256 "e95c5778a7ec7ce88a09d6a44d44cfcfbe8fda68e2a1295bfe4187bb668b07cf"
+    sha256 "ca107a07b7a7e6e9147f6f52c754317358e735615ec12250723bc6ac13ca0983"
+
     pkg "pCloud Drive #{version.to_s}.pkg"
 
-    code = "XZMs0dXZ5AdF7HzjFESTjxVdoWXl4LDwivFk"
+    code = "XZHhitXZbpVumxyseIVXE8O3sjFEYhXYfjA7"
   else
-    sha256 "e95c5778a7ec7ce88a09d6a44d44cfcfbe8fda68e2a1295bfe4187bb668b07cf"
+    sha256 "ca107a07b7a7e6e9147f6f52c754317358e735615ec12250723bc6ac13ca0983"
+
     pkg "pCloud Drive #{version.to_s} M1.pkg"
 
-    code = "XZvs0dXZEFARsDjjTNmBgnGmY8R8lzhjh7Qk"
+    code = "XZWhitXZnqmNyCWf75FK5knarjvi3bG72foX"
   end
 
   url do
