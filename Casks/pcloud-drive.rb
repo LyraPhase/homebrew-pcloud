@@ -29,7 +29,7 @@ cask "pcloud-drive" do
 
     pkg "pCloud Drive #{version.to_s}.pkg"
 
-    code = "XZ3tOaXZUm4eSXTWulRI28k8IeBAU70d"
+    code = "XZ3tOaXZUm4eSXTWulRI28k8IeBAU70dNtGV"
   else
     sha256 "d78db9fbd7b071a5921fc7b45036cccb643f96d58af3b54dff6d2a36e6743785"
 
