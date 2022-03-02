@@ -22,7 +22,11 @@
 
 
 cask "pcloud-drive" do
-  version "3.11.3"
+  if Hardware::CPU.intel?
+    version "3.11.3"
+  elsif Hardware::CPU.physical_cpu_arm64?
+    version "3.11.2"
+  end
 
   if Hardware::CPU.intel?
     sha256 "c8c9e9d71c7ddefd744b9cff9f23726cf93a8dd576e92be59edc7665ec6d2458"
