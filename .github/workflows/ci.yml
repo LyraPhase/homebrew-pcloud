@@ -13,7 +13,7 @@ name: ci
       - main
       - develop
 env:
-  debug_ci: false
+  debug_ci: true
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -23,14 +23,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Add SSH_AUTH_SOCK to user shell .profile
-        run: |
-          sudo tee -a ~/.profile <<EOPROFILE
-          SSH_AUTH_SOCK=${{ env.SSH_AUTH_SOCK }}
-          EOPROFILE
       - name: Set BREWFILE_PATH env var
         run: |
           echo "BREWFILE_PATH=${GITHUB_WORKSPACE}/Brewfile.ci" >> $GITHUB_ENV
