@@ -45,8 +45,6 @@ jobs:
           ls -lR ${GITHUB_WORKSPACE}
           ls -lR /usr/local/Homebrew
         if: env.debug_ci == true
-      - name: Run tap install
-        run: make install
       - name: Configure Homebrew cache
         uses: actions/cache@v2
         with:
@@ -61,6 +59,8 @@ jobs:
             brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
             brew-${{ runner.os }}-${{ runner.arch }}-
             brew-${{ runner.os }}-
+      - name: Run tap install
+        run: make install
       - name: Run test & install
         run: |
           make test
