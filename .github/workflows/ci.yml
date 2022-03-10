@@ -23,9 +23,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: TODO
-        run: |
-          make test
       - uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
