@@ -41,7 +41,7 @@ jobs:
           brew update
       - name: Install dependencies & Clean homebrew cache
         run: |
-          brew bundle install
+          brew bundle install --file=${BREWFILE_PATH}
           brew cleanup
       - name: DEBUG - GitHub Workspace
         run: |
