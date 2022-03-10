@@ -26,6 +26,19 @@ jobs:
       - name: Set BREWFILE_PATH env var
         run: |
           echo "BREWFILE_PATH=${GITHUB_WORKSPACE}/Brewfile.ci" >> $GITHUB_ENV
+      - name: TemporaryFix - Brew Package Management (Github/Action#1811)
+        run: |
+          brew uninstall --force --ignore-dependencies openssl
+          brew cleanup -s openssl
+          brew cleanup --prune-prefix
+          brew install openssl
+          brew uninstall --force --ignore-dependencies python
+          rm $(which 2to3)
+          brew cleanup -s python
+          brew cleanup --prune-prefix
+      - name: Run brew update
+        run: |
+          brew update
       - name: Install dependencies & Clean homebrew cache
         run: |
           brew bundle install
