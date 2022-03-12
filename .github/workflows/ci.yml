@@ -26,6 +26,18 @@ jobs:
       - name: Set BREWFILE_PATH env var
         run: |
           echo "BREWFILE_PATH=${GITHUB_WORKSPACE}/Brewfile.ci" >> $GITHUB_ENV
+      - uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add SSH_AUTH_SOCK to user shell .profile
+        run: |
+          sudo tee -a ~/.profile <<EOPROFILE
+          SSH_AUTH_SOCK=${{ env.SSH_AUTH_SOCK }}
+          EOPROFILE
+      - name: Configure global git SSH URLs
+        run: |
+          git config --global url."git@github.com:".insteadOf "https://github.com/"
+          git config --global url."git@github.com:".insteadOf "git://github"
       - name: Run brew update
         run: |
           brew update
