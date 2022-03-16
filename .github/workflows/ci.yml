@@ -38,6 +38,8 @@ jobs:
         run: |
           git config --global url."git@github.com:".insteadOf "https://github.com/"
           git config --global url."git@github.com:".insteadOf "git://github"
+          cat ~/.gitconfig
+          ssh-add -l
       - name: Run brew update
         run: |
           brew update
