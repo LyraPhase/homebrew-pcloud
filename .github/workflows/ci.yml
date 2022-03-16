@@ -44,13 +44,10 @@ jobs:
             ~/Library/Caches/Homebrew/*--*
             ~/Library/Caches/Homebrew/downloads/*--*
             ~/Library/Caches/Homebrew/Cask/*--*
-            /usr/local/Homebrew/Library/Taps/**
-            /opt/Homebrew/Library/Taps/**
-          key: brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
+          key: brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
           restore-keys: |
-            brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
-            brew-${{ runner.os }}-${{ runner.arch }}-
-            brew-${{ runner.os }}-
+            brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
+            brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}
       - name: Run brew update
         run: |
           brew update
