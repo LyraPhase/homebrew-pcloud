@@ -53,8 +53,8 @@ jobs:
           brew update
       - name: Install dependencies & Clean homebrew cache
         run: |
-          brew bundle install --file=${BREWFILE_PATH}
           brew cleanup
+          brew bundle install --file=${BREWFILE_PATH}
       - name: DEBUG - GitHub Workspace
         run: |
           echo GITHUB_WORKSPACE=$GITHUB_WORKSPACE
