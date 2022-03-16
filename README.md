@@ -42,7 +42,7 @@ First, make sure you have installed [`homebrew`](https://brew.sh) and
 
 Then, run the following in your command-line:
 
-    brew tap trinitronx/homebrew-pcloud
+    brew tap lyraphase/homebrew-pcloud
 
 ## Usage
 
@@ -81,13 +81,13 @@ useful targets.
 
 To checkout this repo and install in development mode:
 
-    git clone https://github.com/trinitronx/homebrew-pcloud.git
+    git clone https://github.com/lyraphase/homebrew-pcloud.git
     cd homebrew-pcloud
     make install
 
 This will install a symbolic link to this git repo under:
 
-    $(brew --repo)/Library/Taps/trinitronx/homebrew-pcloud
+    $(brew --repo)/Library/Taps/lyraphase/homebrew-pcloud
 
 Then, you may edit and test the Homebrew Cask recipe from the cloned git repo
 file location.
