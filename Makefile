@@ -27,5 +27,16 @@ test: install ## Run tests
 	brew install --cask --verbose $(CASK_NAME)
 	pkgutil --pkgs=com.mobileinno.pkg.pCloudDrive
 
+.github/clear_github_actions_cache:
+	date  +%s > .github/clear_github_actions_cache
+
+.PHONY: clean-github-cache-file clear-github-cache
+clear-github-cache: clean-github-cache-file .github/clear_github_actions_cache ## Force GitHub Actions Cache key to change for fresh CI run
+	git add .github/clear_github_actions_cache
+	git commit -m "Clear GitHub Actions Cache @ $$(cat .github/clear_github_actions_cache)"
+
+clean-github-cache-file: ## Remove GitHub Actions Cache timestamp invalidator file.
+	[ -f '.github/clear_github_actions_cache' ] && rm -f '.github/clear_github_actions_cache' || true
+
 clean:: ## Remove temporary/build files.
 	rm -rf $(TAP_DIR)/$(REPO_NAME)

@@ -2,13 +2,21 @@ version: ~> 1.0
 os: osx
 language: objective-c
 osx_image: xcode12.5
+cache:
+  directories:
+    - $HOME/Library/Caches/Homebrew
 addons:
   homebrew:
-    brewfile: Brewfile.travis
+    brewfile: Brewfile.ci
     update: true
+before_cache:
+  - brew cleanup
 install:
   - make install
 script:
   - make test
 jobs:
   fast_finish: true
+after_failure: |
+  echo "DEBUG: Contents of /var/log/install.log"
+  cat /var/log/install.log
