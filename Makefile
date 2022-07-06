@@ -1,9 +1,9 @@
-GITHUB_USER := trinitronx
+REPO_ORG := LyraPhase
 REPO_NAME := homebrew-pcloud
-REPO := $(GITHUB_USER)/$(REPO_NAME)
+REPO := $(REPO_ORG)/$(REPO_NAME)
 CASK_NAME := pcloud-drive
 HOMEBREW_LIBRARY_TAPS := $(shell brew --repo)/Library/Taps
-TAP_DIR := $(HOMEBREW_LIBRARY_TAPS)/$(GITHUB_USER)
+TAP_DIR := $(HOMEBREW_LIBRARY_TAPS)/$(REPO_ORG)
 
 DEFAULT_GOAL: help ## no-help
 
