@@ -19,14 +19,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-11]
+        os: [macos-12, macos-13, macos-14]
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Set BREWFILE_PATH env var
-        run: |
-          echo "BREWFILE_PATH=${GITHUB_WORKSPACE}/Brewfile.ci" >> $GITHUB_ENV
-      - uses: webfactory/ssh-agent@v0.5.4
+# Now handled by Homebrew/actions/setup-homebrew
+# See: https://github.com/Homebrew/actions/blob/master/setup-homebrew/main.sh#L207-L242
+#      - name: Check out code
+#        uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Add SSH_AUTH_SOCK to user shell .profile
@@ -37,39 +36,107 @@ jobs:
       - name: Configure global git SSH URLs
         run: |
           git config --global url."git@github.com:".insteadOf "https://github.com/"
-      - name: Configure Homebrew cache
-        uses: actions/cache@v2
+
+      - name: Set BREWFILE_PATH env var
+        run: |
+          echo "BREWFILE_PATH=${GITHUB_WORKSPACE}/Brewfile.ci" >> $GITHUB_ENV
+
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Check out Pull Request
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: DEBUG Tap Repo
+        run: |
+          echo HOMEBREW_TAP_REPOSITORY=${{ steps.set-up-homebrew.outputs.repository-path }}
+          ls -l ${{ steps.set-up-homebrew.outputs.repository-path }}
+          cd ${{ steps.set-up-homebrew.outputs.repository-path }} && git status && git log --graph --decorate --oneline --all --abbrev-commit
+        if: ${{ env.debug_ci == 'true' }}
+
+      - name: Cache Homebrew Bundler RubyGems
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: ${{ runner.os }}-${{ runner.arch }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-rubygems-
+
+      - name: Cache style cache
+        if: runner.os == 'macOS'
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/Homebrew/style
+          key: macos-style-cache-${{ github.sha }}
+          restore-keys: macos-style-cache-
+
+      - name: Cache local Tap Casks
+        if: runner.os == 'macOS'
+        uses: actions/cache@v4
         with:
           path: |
-            ~/Library/Caches/Homebrew/*--*
-            ~/Library/Caches/Homebrew/downloads/*--*
-            ~/Library/Caches/Homebrew/Cask/*--*
-          key: brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
+            ~/Library/Caches/Homebrew/pcloud-drive--*
+            ~/Library/Caches/Homebrew/downloads/pcloud-drive--*
+            ~/Library/Caches/Homebrew/Cask/*--pCloud*.pkg*
+          key: brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}-${{ hashFiles('Casks/**.rb') }}
           restore-keys: |
+            brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}-${{ hashFiles('Casks/**.rb') }}
             brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
             brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}
+
+      # Note: Disabling this b/c size is over 3 GiB now!
+      # So, cache was actually slowing down the CI run
+      # - name: Configure Homebrew cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/Library/Caches/Homebrew/*--*
+      #       ~/Library/Caches/Homebrew/downloads/*--*
+      #       ~/Library/Caches/Homebrew/Cask/*--*
+      #     key: brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
+      #     restore-keys: |
+      #       brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
+      #       brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}
+
       - name: Run brew update
+        env:
+          HOMEBREW_COLOR: 1
+          HOMEBREW_DEVELOPER: 1
         run: |
-          brew update
-      - name: Install dependencies & Clean homebrew cache
+          brew update-reset
+      - name: Clean homebrew cache
+        env:
+          HOMEBREW_COLOR: 1
+          HOMEBREW_DEVELOPER: 1
         run: |
           brew cleanup
           brew bundle install --file=${BREWFILE_PATH}
       - name: DEBUG - GitHub Workspace
         run: |
-          echo GITHUB_WORKSPACE=$GITHUB_WORKSPACE
-        if: env.debug_ci == true
+          echo GITHUB_WORKSPACE="$GITHUB_WORKSPACE"
+        if: ${{ env.debug_ci == 'true' }}
       - name: DEBUG - Print all shell env exports
         run: export -p
-        if: env.debug_ci == true
+        if: ${{ env.debug_ci == 'true' }}
       - name: DEBUG - List workspace and Homebrew contents
         run: |
-          ls -lR ${GITHUB_WORKSPACE}
+          ls -lR "${GITHUB_WORKSPACE}"
           ls -lR /usr/local/Homebrew
-        if: env.debug_ci == true
+        if: ${{ env.debug_ci == 'true' }}
       - name: Run tap install
+        env:
+          HOMEBREW_COLOR: 1
+          HOMEBREW_DEVELOPER: 1
+          HOMEBREW_NO_SORBET_RUNTIME: 1
         run: make install
       - name: Run test & install
+        env:
+          HOMEBREW_COLOR: 1
+          HOMEBREW_DEVELOPER: 1
         run: |
           make test
       - name: Upload install.log on failure
