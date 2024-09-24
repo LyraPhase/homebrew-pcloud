@@ -22,25 +22,11 @@
 
 
 cask "pcloud-drive" do
-  if Hardware::CPU.intel?
-    version "3.15.2"
-  elsif Hardware::CPU.physical_cpu_arm64?
-    version "3.15.2"
-  end
+  version "3.15.2"
 
-  if Hardware::CPU.intel?
   sha256 "244794dde3f242f82e1644e0dd9bb859d318499ff101c25637b579d96a26bd1c"
-
-    pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
-
-    code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
-  else
-    sha256 "244794dde3f242f82e1644e0dd9bb859d318499ff101c25637b579d96a26bd1c"
-
-    pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
-
-    code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
-  end
+  pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
+  code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
 
   url do
     require "net/http"
