@@ -23,23 +23,23 @@
 
 cask "pcloud-drive" do
   if Hardware::CPU.intel?
-    version "3.13.4"
+    version "3.15.2"
   elsif Hardware::CPU.physical_cpu_arm64?
-    version "3.13.4"
+    version "3.15.2"
   end
 
   if Hardware::CPU.intel?
-    sha256 "8c41ebd7c8eb8dfa852659cd48115b72f60f70990d426b74f742b1f55200e23e"
+  sha256 "244794dde3f242f82e1644e0dd9bb859d318499ff101c25637b579d96a26bd1c"
 
-    pkg "pCloud Drive #{version.to_s}.pkg"
+    pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
 
-    code = "XZm1CaVZQacPWT06LpS52q4k6QY1USeGXi97"
+    code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
   else
-    sha256 "0475b8b3fde324ce3c9f10e1fd0ecfde81605e2ea5fa72af22ae7180a4b11ac2"
+    sha256 "244794dde3f242f82e1644e0dd9bb859d318499ff101c25637b579d96a26bd1c"
 
-    pkg "pCloud Drive #{version.to_s} macFUSE.pkg"
+    pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
 
-    code = "XZu1CaVZ9hG7ro0l4g8hUAJtqMtds8fPPHXk"
+    code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
   end
 
   url do
