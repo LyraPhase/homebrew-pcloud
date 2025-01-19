@@ -141,7 +141,7 @@ jobs:
           make test
       - name: Upload install.log on failure
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Build failure logs
           path: /var/log/install.log
