@@ -22,11 +22,11 @@
 
 
 cask "pcloud-drive" do
-  version "3.15.2"
+  version "3.15.4"
 
-  sha256 "244794dde3f242f82e1644e0dd9bb859d318499ff101c25637b579d96a26bd1c"
+  sha256 "475f0608e2d78f65e64eebac07656e241dc624e659ecbac7d20aabea6202b30f"
   pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
-  code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
+  code = "XZevlJ5Z082XHstfOoJ1gk5l4RJVqQWUaew7"
 
   def construct_url(code)
     require "net/http"
