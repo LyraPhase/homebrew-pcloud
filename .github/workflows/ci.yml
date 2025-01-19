@@ -13,7 +13,7 @@ name: ci
       - main
       - develop
 env:
-  debug_ci: false
+  debug_ci: true
 jobs:
   test:
     runs-on: ${{ matrix.os }}
