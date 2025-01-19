@@ -28,7 +28,7 @@ cask "pcloud-drive" do
   pkg "pCloud Drive #{version.to_s} UNIVERSAL.pkg"
   code = "XZJPkU0Zsz7DuTM5Bb7YhYyHJJJmLQhdVorX"
 
-  url do
+  def construct_url
     require "net/http"
     require "json"
     api = "https://api.pcloud.com/"
@@ -37,6 +37,8 @@ cask "pcloud-drive" do
     data = JSON.parse(response)
     "https://" + data["hosts"][0] + data["path"]
   end
+
+  url construct_url
 
   livecheck do
     url "https://www.pcloud.com/release-notes/mac-os.html"
