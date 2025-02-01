@@ -121,7 +121,7 @@ jobs:
           git fetch origin ${{ github.ref }}
           git checkout -qf FETCH_HEAD
           git show
-          git status && git log --graph --decorate --oneline --all --abbrev-commit
+          git status && git log --graph --decorate --oneline --all --abbrev-commit -n 25
 
       - name: DEBUG - List workspace and Homebrew contents
         run: |
