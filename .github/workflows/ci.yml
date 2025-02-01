@@ -113,6 +113,7 @@ jobs:
       - name: DEBUG - List workspace and Homebrew contents
         run: |
           ls -lR "${GITHUB_WORKSPACE}"
+          cat "${GITHUB_WORKSPACE}/Casks/pcloud-drive.rb"
           ls -lR "$(brew --repo)"
         if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
       - name: Run tap install
