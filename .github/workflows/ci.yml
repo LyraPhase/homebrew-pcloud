@@ -97,6 +97,11 @@ jobs:
           HOMEBREW_DEVELOPER: 1
         run: |
           brew cleanup
+      - name: Run brew bundle install (CI dependencies)
+        env:
+          HOMEBREW_COLOR: 1
+          HOMEBREW_DEVELOPER: 1
+        run: |
           brew bundle install --file=${BREWFILE_PATH}
       - name: DEBUG - GitHub Workspace
         run: |
