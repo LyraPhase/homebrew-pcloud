@@ -128,3 +128,4 @@ jobs:
         with:
           name: Build failure logs
           path: /var/log/install.log
+          overwrite: true
