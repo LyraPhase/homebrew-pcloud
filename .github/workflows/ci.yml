@@ -19,23 +19,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-12, macos-13, macos-14]
+        os: [macos-13, macos-14, macos-15]
     steps:
 # Now handled by Homebrew/actions/setup-homebrew
 # See: https://github.com/Homebrew/actions/blob/master/setup-homebrew/main.sh#L207-L242
+# Note: brew update-reset resets to master branch, so we must checkout PR merge
+#       ref again later to test against latest changes.
+#       We also use pull_request rather than pull_request_target to avoid
+#       exposing secrets other than the ReadOnly GITHUB_TOKEN
 #      - name: Check out code
 #        uses: actions/checkout@v4
-      - uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Add SSH_AUTH_SOCK to user shell .profile
-        run: |
-          sudo tee -a ~/.profile <<EOPROFILE
-          SSH_AUTH_SOCK=${{ env.SSH_AUTH_SOCK }}
-          EOPROFILE
-      - name: Configure global git SSH URLs
-        run: |
-          git config --global url."git@github.com:".insteadOf "https://github.com/"
 
       - name: Set BREWFILE_PATH env var
         run: |
@@ -45,18 +38,12 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Check out Pull Request
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
       - name: DEBUG Tap Repo
         run: |
           echo HOMEBREW_TAP_REPOSITORY=${{ steps.set-up-homebrew.outputs.repository-path }}
           ls -l ${{ steps.set-up-homebrew.outputs.repository-path }}
           cd ${{ steps.set-up-homebrew.outputs.repository-path }} && git status && git log --graph --decorate --oneline --all --abbrev-commit
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
 
       - name: Cache Homebrew Bundler RubyGems
         id: cache
@@ -102,7 +89,7 @@ jobs:
       #       brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
       #       brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}
 
-      - name: Run brew update
+      - name: Run brew update-reset
         env:
           HOMEBREW_COLOR: 1
           HOMEBREW_DEVELOPER: 1
@@ -114,19 +101,34 @@ jobs:
           HOMEBREW_DEVELOPER: 1
         run: |
           brew cleanup
+      - name: Run brew bundle install (CI dependencies)
+        env:
+          HOMEBREW_COLOR: 1
+          HOMEBREW_DEVELOPER: 1
+        run: |
           brew bundle install --file=${BREWFILE_PATH}
       - name: DEBUG - GitHub Workspace
         run: |
           echo GITHUB_WORKSPACE="$GITHUB_WORKSPACE"
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
       - name: DEBUG - Print all shell env exports
         run: export -p
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
+
+      - name: Git checkout GHA event ref (PR merge commit)
+        run: |
+          echo "github.ref = ${{ github.ref }}"
+          git fetch origin ${{ github.ref }}
+          git checkout -qf FETCH_HEAD
+          git show
+          git status && git log --graph --decorate --oneline --all --abbrev-commit -n 25
+
       - name: DEBUG - List workspace and Homebrew contents
         run: |
           ls -lR "${GITHUB_WORKSPACE}"
-          ls -lR /usr/local/Homebrew
-        if: ${{ env.debug_ci == 'true' }}
+          cat "${GITHUB_WORKSPACE}/Casks/pcloud-drive.rb"
+          ls -lR "$(brew --repo)"
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
       - name: Run tap install
         env:
           HOMEBREW_COLOR: 1
@@ -141,7 +143,8 @@ jobs:
           make test
       - name: Upload install.log on failure
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Build failure logs
           path: /var/log/install.log
+          overwrite: true
