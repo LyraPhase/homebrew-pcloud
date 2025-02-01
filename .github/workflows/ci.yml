@@ -25,17 +25,6 @@ jobs:
 # See: https://github.com/Homebrew/actions/blob/master/setup-homebrew/main.sh#L207-L242
 #      - name: Check out code
 #        uses: actions/checkout@v4
-      - uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Add SSH_AUTH_SOCK to user shell .profile
-        run: |
-          sudo tee -a ~/.profile <<EOPROFILE
-          SSH_AUTH_SOCK=${{ env.SSH_AUTH_SOCK }}
-          EOPROFILE
-      - name: Configure global git SSH URLs
-        run: |
-          git config --global url."git@github.com:".insteadOf "https://github.com/"
 
       - name: Set BREWFILE_PATH env var
         run: |
@@ -44,12 +33,6 @@ jobs:
       - name: Set up Homebrew
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
-
-      - name: Check out Pull Request
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
 
       - name: DEBUG Tap Repo
         run: |
