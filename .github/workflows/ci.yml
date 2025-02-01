@@ -23,6 +23,10 @@ jobs:
     steps:
 # Now handled by Homebrew/actions/setup-homebrew
 # See: https://github.com/Homebrew/actions/blob/master/setup-homebrew/main.sh#L207-L242
+# Note: brew update-reset resets to master branch, so we must checkout PR merge
+#       ref again later to test against latest changes.
+#       We also use pull_request rather than pull_request_target to avoid
+#       exposing secrets other than the ReadOnly GITHUB_TOKEN
 #      - name: Check out code
 #        uses: actions/checkout@v4
 
@@ -85,7 +89,7 @@ jobs:
       #       brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}-${{ hashFiles( env.BREWFILE_PATH, '**/Brewfile.lock.json') }}
       #       brew-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/clear_github_actions_cache') }}
 
-      - name: Run brew update
+      - name: Run brew update-reset
         env:
           HOMEBREW_COLOR: 1
           HOMEBREW_DEVELOPER: 1
