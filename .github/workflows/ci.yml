@@ -54,13 +54,13 @@ jobs:
           key: ${{ runner.os }}-${{ runner.arch }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-rubygems-
 
-      - name: Cache style cache
-        if: runner.os == 'macOS'
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Caches/Homebrew/style
-          key: macos-style-cache-${{ github.sha }}
-          restore-keys: macos-style-cache-
+#      - name: Cache style cache
+#        if: runner.os == 'macOS'
+#        uses: actions/cache@v4
+#        with:
+#          path: ~/Library/Caches/Homebrew/style
+#          key: macos-style-cache-${{ github.sha }}
+#          restore-keys: macos-style-cache-
 
       - name: Cache local Tap Casks
         if: runner.os == 'macOS'
