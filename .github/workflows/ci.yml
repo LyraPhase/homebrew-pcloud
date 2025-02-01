@@ -39,6 +39,9 @@ jobs:
           echo HOMEBREW_TAP_REPOSITORY=${{ steps.set-up-homebrew.outputs.repository-path }}
           ls -l ${{ steps.set-up-homebrew.outputs.repository-path }}
           cd ${{ steps.set-up-homebrew.outputs.repository-path }} && git status && git log --graph --decorate --oneline --all --abbrev-commit
+          echo "github.ref = ${{ github.ref }}"
+          git fetch origin ${{ github.ref }}
+          git checkout -qf FETCH_HEAD
         if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
 
       - name: Cache Homebrew Bundler RubyGems
