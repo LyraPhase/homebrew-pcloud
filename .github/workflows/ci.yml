@@ -42,6 +42,8 @@ jobs:
           echo "github.ref = ${{ github.ref }}"
           git fetch origin ${{ github.ref }}
           git checkout -qf FETCH_HEAD
+          git show
+          git status && git log --graph --decorate --oneline --all --abbrev-commit
         if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
 
       - name: Cache Homebrew Bundler RubyGems
