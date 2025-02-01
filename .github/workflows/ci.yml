@@ -39,11 +39,6 @@ jobs:
           echo HOMEBREW_TAP_REPOSITORY=${{ steps.set-up-homebrew.outputs.repository-path }}
           ls -l ${{ steps.set-up-homebrew.outputs.repository-path }}
           cd ${{ steps.set-up-homebrew.outputs.repository-path }} && git status && git log --graph --decorate --oneline --all --abbrev-commit
-          echo "github.ref = ${{ github.ref }}"
-          git fetch origin ${{ github.ref }}
-          git checkout -qf FETCH_HEAD
-          git show
-          git status && git log --graph --decorate --oneline --all --abbrev-commit
         if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
 
       - name: Cache Homebrew Bundler RubyGems
@@ -110,6 +105,15 @@ jobs:
       - name: DEBUG - Print all shell env exports
         run: export -p
         if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
+
+      - name: Git checkout GHA event ref (PR merge commit)
+        run: |
+          echo "github.ref = ${{ github.ref }}"
+          git fetch origin ${{ github.ref }}
+          git checkout -qf FETCH_HEAD
+          git show
+          git status && git log --graph --decorate --oneline --all --abbrev-commit
+
       - name: DEBUG - List workspace and Homebrew contents
         run: |
           ls -lR "${GITHUB_WORKSPACE}"
