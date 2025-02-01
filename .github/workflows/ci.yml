@@ -39,7 +39,7 @@ jobs:
           echo HOMEBREW_TAP_REPOSITORY=${{ steps.set-up-homebrew.outputs.repository-path }}
           ls -l ${{ steps.set-up-homebrew.outputs.repository-path }}
           cd ${{ steps.set-up-homebrew.outputs.repository-path }} && git status && git log --graph --decorate --oneline --all --abbrev-commit
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
 
       - name: Cache Homebrew Bundler RubyGems
         id: cache
@@ -101,15 +101,15 @@ jobs:
       - name: DEBUG - GitHub Workspace
         run: |
           echo GITHUB_WORKSPACE="$GITHUB_WORKSPACE"
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
       - name: DEBUG - Print all shell env exports
         run: export -p
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
       - name: DEBUG - List workspace and Homebrew contents
         run: |
           ls -lR "${GITHUB_WORKSPACE}"
           ls -lR "$(brew --repo)"
-        if: ${{ env.debug_ci == 'true' }}
+        if: ${{ env.debug_ci == 'true' || runner.debug == '1' }}
       - name: Run tap install
         env:
           HOMEBREW_COLOR: 1
